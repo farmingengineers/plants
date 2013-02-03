@@ -1,11 +1,16 @@
-#!/usr/bin/env bundle exec ruby
+#!/usr/bin/env bundle exec rails runner
 
 require 'anemone'
 
 def main
-  crawl_johnnys
-  crawl_fedco
-  crawl_high_mowing
+  say_and_do :crawl_johnnys
+  say_and_do :crawl_fedco
+  say_and_do :crawl_high_mowing
+end
+
+def say_and_do(method)
+  puts method
+  send method
 end
 
 def crawl_johnnys
