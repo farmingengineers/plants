@@ -21,6 +21,7 @@ def crawl_johnnys
         page.links.select { |u| u.path =~ /^\/[cp]-/ }
       end
       anemone.on_every_page do |page|
+        puts page.url
         if page.url.path =~ /^\/p-/
           catalog.catalog_pages.create(:url => page.url.to_s, :body => page.body)
         end
@@ -35,7 +36,7 @@ def crawl_fedco
     1.upto(6499) do |item_id|
       url = "#{catalog.url}seeds/search.php?item=#{item_id}&index=0"
       c = Curl::Easy.new(url) do |curl|
-        curl.on_success { |easy| catalog.catalog_pages.create(:url => url, :body => response.body_str) }
+        curl.on_success { |easy| puts url ; catalog.catalog_pages.create(:url => url, :body => response.body_str) }
       end
       m.add(c)
     end
@@ -50,6 +51,7 @@ def crawl_high_mowing
         page.links.select { |u| u.path =~ /^\/organic-/ }
       end
       anemone.on_every_page do |page|
+        puts page.url
         catalog.catalog_pages.create(:url => page.url.to_s, :body => page.body)
       end
     end
