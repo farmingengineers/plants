@@ -1,6 +1,7 @@
 #!/usr/bin/env bundle exec rails runner
 
 require 'anemone'
+require 'curb'
 
 def main
   say_and_do :crawl_johnnys
@@ -14,35 +15,50 @@ def say_and_do(method)
 end
 
 def crawl_johnnys
-  Anemone.crawl("http://www.johnnyseeds.com/") do |anemone|
-    anemone.focus_crawl do |page|
-      page.links.select { |u| u.path =~ /^\/[cp]-/ }
-    end
-    anemone.on_every_page do |page|
-      if page.url.path =~ /^\/p-/
-        scrape_johhnys(page.doc)
+  with_catalog("Johnny's Selected Seeds", "http://www.johnnyseeds.com/") do |catalog|
+    Anemone.crawl(catalog.url) do |anemone|
+      anemone.focus_crawl do |page|
+        page.links.select { |u| u.path =~ /^\/[cp]-/ }
+      end
+      anemone.on_every_page do |page|
+        if page.url.path =~ /^\/p-/
+          catalog.catalog_pages.create(:url => page.url.to_s, :body => page.body)
+        end
       end
     end
   end
 end
 
 def crawl_fedco
-  1.upto(6499) do |item_id|
-    url = "http://www.fedcoseeds.com/seeds/search.php?item=#{item_id}&index=0"
-    doc = get(url)
-    scape_fedco(doc)
+  with_catalog("Fedco Seeds", "http://www.fedcoseeds.com/") do |catalog|
+    multi = Curl::Multi.new
+    1.upto(6499) do |item_id|
+      url = "#{catalog.url}seeds/search.php?item=#{item_id}&index=0"
+      c = Curl::Easy.new(url) do |curl|
+        curl.on_success { |easy| catalog.catalog_pages.create(:url => url, :body => response.body_str) }
+      end
+      m.add(c)
+    end
+    multi.perform
   end
 end
 
 def crawl_high_mowing
-  Anemone.crawl("http://www.highmowingseeds.com/") do |anemone|
-    anemone.focus_crawl do |page|
-      page.links.select { |u| u.path =~ /^\/organic-/ }
-    end
-    anemone.on_every_page do |page|
-      scrape_high_mowing(page.doc)
+  with_catalog("Johnny's Selected Seeds", "http://www.johnnyseeds.com/") do |catalog|
+    Anemone.crawl("http://www.highmowingseeds.com/") do |anemone|
+      anemone.focus_crawl do |page|
+        page.links.select { |u| u.path =~ /^\/organic-/ }
+      end
+      anemone.on_every_page do |page|
+        catalog.catalog_pages.create(:url => page.url.to_s, :body => page.body)
+      end
     end
   end
+end
+
+def with_catalog(name, url)
+  Catalog.where(:url => url).destroy_all
+  yield Catalog.create!(:name => name, :url => url)
 end
 
 main

@@ -1,6 +1,7 @@
 source 'https://rubygems.org'
 
-gem 'anemone'
+gem 'anemone', :require => false
+gem 'curb', :require => false
 gem 'haml-rails'
 gem 'jquery-rails'
 gem 'rails', '3.2.11'
