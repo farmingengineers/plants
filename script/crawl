@@ -18,7 +18,7 @@ def crawl_johnnys
   with_catalog("Johnny's Selected Seeds", "http://www.johnnyseeds.com/") do |catalog|
     Anemone.crawl(catalog.url) do |anemone|
       anemone.focus_crawl do |page|
-        page.links.select { |u| u.path =~ /^\/[cp]-/ }
+        page.links.select { |u| u.path =~ /^\/[cp]-/ and u.query.nil? }
       end
       anemone.on_every_page do |page|
         puts page.url
