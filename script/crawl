@@ -1,0 +1,43 @@
+#!/usr/bin/env bundle exec ruby
+
+require 'anemone'
+
+def main
+  crawl_johnnys
+  crawl_fedco
+  crawl_high_mowing
+end
+
+def crawl_johnnys
+  Anemone.crawl("http://www.johnnyseeds.com/") do |anemone|
+    anemone.focus_crawl do |page|
+      page.links.select { |u| u.path =~ /^\/[cp]-/ }
+    end
+    anemone.on_every_page do |page|
+      if page.url.path =~ /^\/p-/
+        scrape_johhnys(page.doc)
+      end
+    end
+  end
+end
+
+def crawl_fedco
+  1.upto(6499) do |item_id|
+    url = "http://www.fedcoseeds.com/seeds/search.php?item=#{item_id}&index=0"
+    doc = get(url)
+    scape_fedco(doc)
+  end
+end
+
+def crawl_high_mowing
+  Anemone.crawl("http://www.highmowingseeds.com/") do |anemone|
+    anemone.focus_crawl do |page|
+      page.links.select { |u| u.path =~ /^\/organic-/ }
+    end
+    anemone.on_every_page do |page|
+      scrape_high_mowing(page.doc)
+    end
+  end
+end
+
+main
