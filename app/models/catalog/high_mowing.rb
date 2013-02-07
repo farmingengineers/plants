@@ -4,8 +4,8 @@ class Catalog
 
     def crawl
       require 'anemone'
-      with_catalog("Johnny's Selected Seeds", "http://www.johnnyseeds.com/") do |catalog|
-        Anemone.crawl("http://www.highmowingseeds.com/") do |anemone|
+      with_catalog("High Mowing Seed", "http://www.highmowingseeds.com/") do |catalog|
+        Anemone.crawl(catalog.url) do |anemone|
           anemone.focus_crawl do |page|
             page.links.select { |u| u.path =~ /^\/organic-/ }
           end
