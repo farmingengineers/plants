@@ -33,6 +33,24 @@ class Catalog
           item.description << "\n\n"
           item.description << tab.text.strip
         end
+
+        item.save
+        collect_prices(item, doc)
+      end
+    end
+
+    def collect_prices(item, doc)
+      doc.css('.productResultInfo form tr').each do |price_row|
+        product, price, quantity = price_row.css('td')
+        if price.present? && (price.text =~ /\$(\d*\.\d*)/) && (product = product.css('span').last)
+          price = $1
+          product = product.text
+          quantity = quantity.try(:text)
+          catalog_price = CatalogPrice.new
+          catalog_price.quantity = "#{product} #{quantity}"
+          catalog_price.cents = price.to_f * 100
+          item.catalog_prices << catalog_price
+        end
       end
     end
 
