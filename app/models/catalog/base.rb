@@ -4,9 +4,25 @@ class Catalog
   module Base
     extend ActiveSupport::Concern
 
-    def with_catalog
-      Catalog.where(:url => catalog_url).destroy_all
-      yield Catalog.create!(:name => catalog_name, :url => catalog_url)
+    # We could do this:
+    #def scrape
+    #  crawl
+    #  parse
+    #end
+
+    def crawl
+      catalog.catalog_pages.destroy_all
+      collect_pages
+    end
+
+    def parse
+      catalog.catalog_pages.each do |page|
+        parse_page(page)
+      end
+    end
+
+    def catalog
+      @catalog ||= Catalog.where(:url => catalog_url).first_or_create!(:name => catalog_name)
     end
 
     module ClassMethods
