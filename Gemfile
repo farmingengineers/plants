@@ -15,5 +15,6 @@ end
 
 group :development, :test do
   gem 'debugger'
+  gem 'heroku'
   gem 'rspec-rails'
 end
