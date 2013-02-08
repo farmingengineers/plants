@@ -19,7 +19,7 @@ class Catalog
       end
     end
 
-    def parse_page(catalog_page)
+    def parse_page(catalog_page, doc)
     end
   end
 end

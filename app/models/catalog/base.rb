@@ -17,7 +17,8 @@ class Catalog
 
     def parse
       catalog.catalog_pages.each do |page|
-        parse_page(page)
+        doc = Nokogiri::HTML(page.body)
+        parse_page(page, doc)
       end
     end
 

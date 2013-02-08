@@ -11,7 +11,18 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130203025734) do
+ActiveRecord::Schema.define(:version => 20130208182230) do
+
+  create_table "catalog_items", :force => true do |t|
+    t.integer  "catalog_page_id"
+    t.string   "name"
+    t.boolean  "organic"
+    t.text     "description"
+    t.datetime "created_at",      :null => false
+    t.datetime "updated_at",      :null => false
+  end
+
+  add_index "catalog_items", ["catalog_page_id"], :name => "index_catalog_items_on_catalog_page_id"
 
   create_table "catalog_pages", :force => true do |t|
     t.integer  "catalog_id"
@@ -22,6 +33,16 @@ ActiveRecord::Schema.define(:version => 20130203025734) do
   end
 
   add_index "catalog_pages", ["catalog_id"], :name => "index_catalog_pages_on_catalog_id"
+
+  create_table "catalog_prices", :force => true do |t|
+    t.integer  "catalog_item_id"
+    t.string   "quantity"
+    t.integer  "cents"
+    t.datetime "created_at",      :null => false
+    t.datetime "updated_at",      :null => false
+  end
+
+  add_index "catalog_prices", ["catalog_item_id"], :name => "index_catalog_prices_on_catalog_item_id"
 
   create_table "catalogs", :force => true do |t|
     t.string   "name"
