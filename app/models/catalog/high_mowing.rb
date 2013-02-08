@@ -16,5 +16,8 @@ class Catalog
         end
       end
     end
+
+    def parse
+    end
   end
 end
