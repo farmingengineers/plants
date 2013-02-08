@@ -2,10 +2,13 @@ class Catalog
   class Fedco
     include ::Catalog::Base
 
+    catalog_name 'Fedco Seeds'
+    catalog_url  'http://www.fedcoseeds.com/'
+
     def crawl
       cookiejar = Rails.root.join('tmp/fedco_cookies').to_s
       FileUtils.safe_unlink(cookiejar)
-      with_catalog("Fedco Seeds", "http://www.fedcoseeds.com/") do |catalog|
+      with_catalog do |catalog|
         curl = Curl::Easy.new
         curl.follow_location = true
         curl.enable_cookies = true

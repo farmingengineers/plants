@@ -2,8 +2,11 @@ class Catalog
   class HighMowing
     include ::Catalog::Base
 
+    catalog_name 'High Mowing Seed'
+    catalog_url  'http://www.highmowingseeds.com/'
+
     def crawl
-      with_catalog("High Mowing Seed", "http://www.highmowingseeds.com/") do |catalog|
+      with_catalog do |catalog|
         Anemone.crawl(catalog.url) do |anemone|
           anemone.focus_crawl do |page|
             page.links.select { |u| u.path =~ /^\/organic-/ }
