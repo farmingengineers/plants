@@ -2,8 +2,8 @@ source 'https://rubygems.org'
 
 gem 'haml-rails'
 gem 'jquery-rails'
+gem 'pg'
 gem 'rails', '3.2.11'
-gem 'sqlite3'
 
 group :scrape do
   gem 'anemone'
@@ -21,4 +21,5 @@ group :development, :test do
   gem 'debugger'
   gem 'heroku'
   gem 'rspec-rails'
+  gem 'sqlite3'
 end
