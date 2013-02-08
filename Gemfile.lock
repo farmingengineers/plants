@@ -159,6 +159,7 @@ DEPENDENCIES
   haml-rails
   heroku
   jquery-rails
+  nokogiri
   rails (= 3.2.11)
   rspec-rails
   sass-rails (~> 3.2.3)

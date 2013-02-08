@@ -3,7 +3,6 @@ class Catalog
     include ::Catalog::Base
 
     def crawl
-      require 'anemone'
       with_catalog("High Mowing Seed", "http://www.highmowingseeds.com/") do |catalog|
         Anemone.crawl(catalog.url) do |anemone|
           anemone.focus_crawl do |page|

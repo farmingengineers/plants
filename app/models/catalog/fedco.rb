@@ -3,7 +3,6 @@ class Catalog
     include ::Catalog::Base
 
     def crawl
-      require 'curb'
       cookiejar = Rails.root.join('tmp/fedco_cookies').to_s
       FileUtils.safe_unlink(cookiejar)
       with_catalog("Fedco Seeds", "http://www.fedcoseeds.com/") do |catalog|

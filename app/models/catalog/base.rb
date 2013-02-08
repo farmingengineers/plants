@@ -1,3 +1,5 @@
+Bundler.require(:scrape)
+
 class Catalog
   module Base
     def with_catalog(name, url)

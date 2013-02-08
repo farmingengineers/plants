@@ -1,11 +1,15 @@
 source 'https://rubygems.org'
 
-gem 'anemone', :require => false
-gem 'curb', :require => false
 gem 'haml-rails'
 gem 'jquery-rails'
 gem 'rails', '3.2.11'
 gem 'sqlite3'
+
+group :scrape do
+  gem 'anemone'
+  gem 'curb'
+  gem 'nokogiri'
+end
 
 group :assets do
   gem 'sass-rails',   '~> 3.2.3'
