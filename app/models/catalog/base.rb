@@ -10,13 +10,15 @@ class Catalog
     #  parse
     #end
 
+    attr_reader :crawl_error
+
     def crawl
       transaction do
         catalog.catalog_pages.destroy_all
         collect_pages
       end
     rescue => e
-      puts e.inspect
+      @crawl_error = e
     end
 
     def parse
@@ -27,6 +29,14 @@ class Catalog
           parse_page(page, doc)
         end
       end
+    end
+
+    protected
+
+    def create_page(url, html)
+      page = CatalogPage.new :url => url, :body => html
+      page.catalog = catalog
+      page.save!
     end
 
     def catalog

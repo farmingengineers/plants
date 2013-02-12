@@ -4,6 +4,7 @@ gem 'haml-rails'
 gem 'jquery-rails'
 gem 'pg'
 gem 'rails', '3.2.11'
+gem 'redis'
 
 group :scrape do
   gem 'anemone'

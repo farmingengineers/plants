@@ -8,14 +8,18 @@ class Catalog
     protected
 
     def collect_pages
-      Anemone.crawl(catalog.url, :storage => Anemone::Storage.PStore('tmp/anemone')) do |anemone|
+      anemone_opts = {}
+      if redis_url = ENV['REDISTOGO_URL']
+        anemone_opts[:storage] = Anemone::Storage.Redis(:url => redis_url)
+      end
+      Anemone.crawl(catalog.url, anemone_opts) do |anemone|
         anemone.focus_crawl do |page|
           page.links.select { |u| u.path =~ /^\/[cp]-/ and u.query.nil? }
         end
         anemone.on_every_page do |page|
           puts page.url
           if page.url.path =~ /^\/p-/
-            catalog.catalog_pages.create(:url => page.url.to_s, :body => page.body)
+            create_page page.url.to_s, page.body
           end
         end
       end
