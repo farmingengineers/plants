@@ -15,6 +15,8 @@ class Catalog
         catalog.catalog_pages.destroy_all
         collect_pages
       end
+    rescue => e
+      puts e.inspect
     end
 
     def parse
