@@ -8,7 +8,7 @@ class Catalog
     protected
 
     def collect_pages
-      Anemone.crawl(catalog.url) do |anemone|
+      Anemone.crawl(catalog.url, :storage => Anemone::Storage.PStore('tmp/anemone')) do |anemone|
         anemone.focus_crawl do |page|
           page.links.select { |u| u.path =~ /^\/[cp]-/ and u.query.nil? }
         end
