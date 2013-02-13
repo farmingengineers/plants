@@ -10,15 +10,11 @@ class Catalog
     #  parse
     #end
 
-    attr_reader :crawl_error
-
     def crawl
       transaction do
         catalog.catalog_pages.destroy_all
         collect_pages
       end
-    rescue => e
-      @crawl_error = e
     end
 
     def parse

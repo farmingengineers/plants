@@ -11,7 +11,11 @@ namespace :crawl do
     desc "Crawl the #{catalog.titleize} catalog"
     task catalog => :environment do
       catalog_class = "Catalog::#{catalog.classify}".constantize
-      catalog_class.new.crawl
+      begin
+        catalog_class.new.crawl
+      rescue => e
+        puts e, e.backtrace
+      end
     end
   end
 end
