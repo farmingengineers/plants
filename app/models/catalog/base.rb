@@ -43,6 +43,13 @@ class Catalog
       @catalog ||= Catalog.where(:url => catalog_url).first_or_create!(:name => catalog_name)
     end
 
+    def anemone_opts
+      opts = {}
+      if redis_url = ENV['REDISTOGO_URL']
+        opts[:storage] = Anemone::Storage.Redis(:url => redis_url)
+      end
+    end
+
     def transaction
       ActiveRecord::Base.transaction do
         yield

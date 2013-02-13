@@ -8,10 +8,6 @@ class Catalog
     protected
 
     def collect_pages
-      anemone_opts = {}
-      if redis_url = ENV['REDISTOGO_URL']
-        anemone_opts[:storage] = Anemone::Storage.Redis(:url => redis_url)
-      end
       Anemone.crawl(catalog.url, anemone_opts) do |anemone|
         anemone.focus_crawl do |page|
           page.links.select { |u| u.path =~ /^\/[cp]-/ and u.query.nil? }
