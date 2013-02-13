@@ -14,7 +14,7 @@ class Catalog
         end
         anemone.on_every_page do |page|
           puts page.url
-          create_page page.url.to_s, page.body
+          create_page page.url.to_s, page.body.force_encoding('CP1252').encode('UTF-8')
         end
       end
     end
