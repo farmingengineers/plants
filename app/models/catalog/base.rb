@@ -45,9 +45,12 @@ class Catalog
 
     def anemone_opts
       opts = {}
+      opts[:threads] = 1
+      opts[:discard_page_bodies] = true
       if redis_url = ENV['REDISTOGO_URL']
         opts[:storage] = Anemone::Storage.Redis(:url => redis_url)
       end
+      opts
     end
 
     def transaction
